@@ -41,5 +41,5 @@ jobs:
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       
       # Deploy site from subfolder htdocs to webserver on gion.io
-      - name: Deploy
-        run: scp -r htdocs/* tobias@gion.io:/usr/local/www/gionio/
+      # - name: Deploy
+      #  run: scp -r htdocs/* tobias@gion.io:/usr/local/www/gionio/
