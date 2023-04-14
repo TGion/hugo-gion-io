@@ -1,0 +1,45 @@
+name: Build and deploy Hugo site on gion.io
+on:  
+#  workflow_dispatch:
+  push:
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+#      - name: Update theme
+#        # (Optional)If you have the theme added as submodule, you can pull it and use the most updated version
+#        run: git submodule update --init --recursive
+
+      - name: Setup Hugo
+        env:
+          HUGO_VERSION: 0.111.3
+        run: |
+          mkdir ~/hugo
+          cd ~/hugo
+          curl -L "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" --output hugo.tar.gz
+          tar -xvzf hugo.tar.gz
+          sudo mv hugo /usr/local/bin
+
+      # Build Hugo site to subfolder htdocs - added to .gitignore
+      - name: Build
+        run: hugo -d htdocs --minify
+
+      # Need to install wireguard to access the server (ssh only allowed inside vpn)
+      # TODO
+      # Wireguard key as secret
+      # Install Wireguard
+      # Should be fun ;)
+      
+      - name: Install SSH Key
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_ed25519
+          echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      
+      # Deploy site from subfolder htdocs to webserver on gion.io
+      - name: Deploy
+        run: scp -r htdocs/* tobias@gion.io:/usr/local/www/gionio/
