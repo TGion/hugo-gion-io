@@ -1,0 +1,87 @@
+baseURL: https://gion.io
+languageCode: en
+title: gion . io
+theme: hugo-theme-codex
+
+defaultContentLanguage: en
+hasCJKLanguage: false
+enableRobotsTXT: false
+
+# paginate: 3
+# disqusShortname: your-disqus-shortname
+copyright: Copyright © 2023 by Tobias Gion - All content is licensed under the BSD Zero Clause License.
+pluralizeListTitles: false
+  
+params:
+  dateFormat: 2 Jan 2006
+  description: Your open source for privacy related topics, FreeBSD-based systems and computer security.
+
+  # github: https://github.com/TGion
+  # email: 'mailto: tobias@gion.io'
+  # linkedin: https://www.linkedin.com/in/tgion/
+  # iconOrder:
+#    - Email
+#    - LinkedIn
+#    - GitHub
+    
+  showPageTitleInTOC: false
+ 
+markup:
+  highlight:
+    codeFences: false
+    guessSyntax: false
+    tabWidth: ""
+    anchorLineNos: false
+    lineAnchors: ""
+    style: ""
+    lineNos: false
+    lineNumbersInTable: false
+    noClasses: false
+    
+#  highlight:
+#    codeFences: true
+#    guessSyntax: false
+#    tabWidth: 4
+#    anchorLineNos: false
+#    lineAnchors: ""
+#    style: monokailight 
+  goldmark:
+    renderer:
+      unsafe: false
+      
+# tableOfContents:
+#    endLevel: 4
+#    ordered: false
+#    startLevel: 2
+
+frontmatter:
+  date:
+    - date
+    - publishDate
+    - lastmod
+  lastmod:
+    - lastmod
+    - :fileModTime
+  
+menu:
+  main:
+    - identifier: home
+      name: home
+      title: home
+      url: /
+      weight: 10
+    - identifier: blog
+      name: blog
+      title: blog
+      url: /blog/
+      weight: 20
+    - identifier: about
+      name: about
+      title: about . me
+      url: /about/
+      weight: 30
+    - identifier: contact
+      name: contact
+      title: contact . me
+      url: /contact/
+      weight: 40
