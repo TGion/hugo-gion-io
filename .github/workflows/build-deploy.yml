@@ -26,7 +26,7 @@ jobs:
 
       # Build Hugo site to subfolder htdocs - added to .gitignore
       - name: Build
-        run: hugo -d htdocs --minify
+        run: hugo -d ${{ github.workspace }}/htdocs --minify
 
       # Need to install wireguard to access the server (ssh only allowed inside vpn)
       # TODO
