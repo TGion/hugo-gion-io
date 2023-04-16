@@ -1,0 +1,20 @@
+name: Test setup Wireguard to VPS
+on:  
+  workflow_dispatch:
+#  push:
+jobs:
+  deploy:
+    name: Test run
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up WireGuard
+      uses: egor-tensin/setup-wireguard@v1
+      with:
+        endpoint: '${{ secrets.ENDPOINT }}'
+        endpoint_public_key: '${{ secrets.ENDPOINT_PUB_KEY }}'
+        ips: '${{ secrets.CLIENT_IP }}'
+        allowed_ips: '${{ secrets.ALLOWED_IPS }}'
+        private_key: '${{ secrets.CLIENT_PRV_KEY }}'
+        preshared_key: '${{ secrets.CLIENT_PRE_KEY }}'
+     - name: Test Connection
+        run: ping -W 10 -c 5 -- '${{ secrets.ENDPOINT_PRIVATE_IP }}'
