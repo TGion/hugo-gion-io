@@ -50,4 +50,4 @@ jobs:
       
       # Deploy site from subfolder htdocs to webserver on gion.io
       - name: Deploy
-        run: scp -r htdocs/* github@'${{ secrets.ENDPOINT_PRIVATE_IP }}':/usr/local/www/gionio.test
+        run: scp -r htdocs/* github@'${{ secrets.ENDPOINT_PRIVATE_IP }}':/usr/local/www/gionio
