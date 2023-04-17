@@ -29,10 +29,18 @@ jobs:
         run: hugo -d ${{ github.workspace }}/htdocs --minify
 
       # Need to install wireguard to access the server (ssh only allowed inside vpn)
-      # TODO
-      # Wireguard key as secret
-      # Install Wireguard
-      # Should be fun ;)
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+        with:
+          endpoint: '${{ secrets.ENDPOINT }}'
+          endpoint_public_key: '${{ secrets.ENDPOINT_PUB_KEY }}'
+          ips: '${{ secrets.CLIENT_IP }}'
+          allowed_ips: '${{ secrets.ALLOWED_IPS }}'
+          private_key: '${{ secrets.CLIENT_PRV_KEY }}'
+          preshared_key: '${{ secrets.CLIENT_PRE_KEY }}'
+          
+      - name: Test Connection
+        run: ping -W 10 -c 5 -- '${{ secrets.ENDPOINT_PRIVATE_IP }}'
       
       - name: Install SSH Key
         run: |
@@ -41,5 +49,5 @@ jobs:
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       
       # Deploy site from subfolder htdocs to webserver on gion.io
-      # - name: Deploy
-      #  run: scp -r htdocs/* tobias@gion.io:/usr/local/www/gionio/
+      - name: Deploy
+        run: scp -r htdocs/* github@gion.io:/usr/local/www/gionio.test
