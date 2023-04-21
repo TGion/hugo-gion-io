@@ -11,8 +11,8 @@
     {{ range .Pages }}
     <li class="post">
       <div class="post__header">
-        <time class="post__date" datetime="{{ .Lastmod }}"
-          >{{ .Lastmod.Format $dateFormat }}</time>
+        <time class="post__date" datetime="{{ .Date }}"
+          >{{ .Date.Format $dateFormat }}</time>
         <h2 class="post__title">
           <a href="{{.RelPermalink}}">{{ .Title }}</a>
         </h2>

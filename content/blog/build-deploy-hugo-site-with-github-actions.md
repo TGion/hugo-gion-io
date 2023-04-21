@@ -1,7 +1,7 @@
  ---
 
 title: "Build and Deploy static Hugo sites with GitHub Actions"  
-date: 2023-04-17T08:00:00+02:00  
+date: 2023-04-21T08:00:00+02:00  
 
 draft: false  
 
