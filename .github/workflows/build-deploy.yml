@@ -7,23 +7,20 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
-
-      # I guess git is not installed and therefore GitInfo variables are not working in Hugo
+      
+      # Needed for .GitInfo variable .AuthorDate to work after deployment: git config --global core.quotepath false
       - name: Set up git
         run: |
           sudo apt-get update
           sudo apt-get install -yq --no-install-recommends git
-          git --version
+          git config --global core.quotepath false    
       
       - name: Setup Hugo
         env:
           HUGO_VERSION: 0.111.3
         run: |
-          mkdir ~/hugo
-          cd ~/hugo
-          curl -L "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" --output hugo.tar.gz
-          tar -xvzf hugo.tar.gz
-          sudo mv hugo /usr/local/bin
+          sudo apt-get update
+          sudo apt-get install -yq --no-install-recommends hugo
 
       # Build Hugo site to subfolder htdocs 
       - name: Build
