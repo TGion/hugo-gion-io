@@ -12,7 +12,7 @@
             <h1 id="post__title">{{.Title}}</h1>
 
 {{ if .Lastmod }}<time datetime="{{ .Lastmod }}"  
-class="post__date">last modified: {{ .Lastmod.Format $dateFormat }} </time> 
+class="post__date">last modified: {{ .Lastmod.Format $dateFormat }} by {{ .GitInfo.AuthorName }} </time>
 {{ end }}
           </header>
           <article class="post__content">
