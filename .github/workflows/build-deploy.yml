@@ -1,7 +1,5 @@
 name: Build and deploy Hugo site on gion.io
-on:  
-  workflow_dispatch:
-#  push:
+on: [push, workflow_dispatch]  
 jobs:
   deploy:
     name: Build and Deploy
@@ -9,10 +7,6 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
-
-#      - name: Update theme
-#        # (Optional)If you have the theme added as submodule, you can pull it and use the most updated version
-#        run: git submodule update --init --recursive
 
       - name: Setup Hugo
         env:
@@ -24,7 +18,7 @@ jobs:
           tar -xvzf hugo.tar.gz
           sudo mv hugo /usr/local/bin
 
-      # Build Hugo site to subfolder htdocs - added to .gitignore
+      # Build Hugo site to subfolder htdocs 
       - name: Build
         run: hugo -d ${{ github.workspace }}/htdocs --minify
 
@@ -38,9 +32,6 @@ jobs:
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
           private_key: '${{ secrets.CLIENT_PRV_KEY }}'
           preshared_key: '${{ secrets.CLIENT_PRE_KEY }}'
-          
-      - name: Test Connection
-        run: ping -W 10 -c 5 -- '${{ secrets.ENDPOINT_PRIVATE_IP }}'
       
       - name: Install SSH Key
         run: |
