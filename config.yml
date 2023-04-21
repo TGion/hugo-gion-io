@@ -7,23 +7,13 @@ defaultContentLanguage: en
 hasCJKLanguage: false
 enableRobotsTXT: false
 
-# paginate: 3
-# disqusShortname: your-disqus-shortname
 copyright: Copyright © 2023 by Tobias Gion - All content is licensed under the BSD Zero Clause License.
 pluralizeListTitles: false
-  
+enableGitInfo: true
+
 params:
   dateFormat: 2 Jan 2006
-  description: Your open source for privacy related topics, FreeBSD-based systems and computer security.
-
-  # github: https://github.com/TGion
-  # email: 'mailto: tobias@gion.io'
-  # linkedin: https://www.linkedin.com/in/tgion/
-  # iconOrder:
-#    - Email
-#    - LinkedIn
-#    - GitHub
-    
+  description: Your open source for privacy related topics, FreeBSD-based systems and computer security.    
   showPageTitleInTOC: false
  
 markup:
