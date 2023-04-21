@@ -16,8 +16,6 @@ jobs:
           git config --global core.quotepath false    
       
       - name: Setup Hugo
-        env:
-          HUGO_VERSION: 0.111.3
         run: |
           sudo apt-get update
           sudo apt-get install -yq --no-install-recommends hugo
