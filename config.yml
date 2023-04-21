@@ -38,22 +38,10 @@ markup:
     lineNumbersInTable: false
     noClasses: false
     
-#  highlight:
-#    codeFences: true
-#    guessSyntax: false
-#    tabWidth: 4
-#    anchorLineNos: false
-#    lineAnchors: ""
-#    style: monokailight 
   goldmark:
     renderer:
       unsafe: false
       
-# tableOfContents:
-#    endLevel: 4
-#    ordered: false
-#    startLevel: 2
-
 frontmatter:
   date:
     - date

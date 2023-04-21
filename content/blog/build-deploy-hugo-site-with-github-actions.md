@@ -9,7 +9,7 @@ description: "Create GitHub Actions to automatically build and deploy a Hugo sit
 keywords: [web, git, github, actions, ssh, wireguard, ci/cd]  
 
 tags: [bsd, git, web]  
-toc: false
+toc: true
 
 ---
 
