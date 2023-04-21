@@ -9,19 +9,18 @@ jobs:
         uses: actions/checkout@v3
       
       # Needed for .GitInfo variable .AuthorDate to work after deployment: git config --global core.quotepath false
-      - name: Set up git
+      - name: Install git
         run: |
           sudo apt-get update
           sudo apt-get install -yq --no-install-recommends git
           git config --global core.quotepath false    
       
-      - name: Setup Hugo
+      - name: Install Hugo
         run: |
           sudo apt-get update
           sudo apt-get install -yq --no-install-recommends hugo
 
-      # Build Hugo site to subfolder htdocs 
-      - name: Build
+      - name: Build Hugo site
         run: hugo -d ${{ github.workspace }}/htdocs --minify
 
       # Need to install wireguard to access the server (ssh only allowed inside vpn)
