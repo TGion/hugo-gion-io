@@ -11,8 +11,8 @@
           <header class="post__header">
             <h1 id="post__title">{{.Title}}</h1>
 
-{{ if .Lastmod }}<time datetime="{{ .Lastmod }}"  
-class="post__date">last updated: {{ .Lastmod.Format $dateFormat }} </time> 
+{{ if .Date }}<time datetime="{{ .Date }}"  
+class="post__date">created: {{ .Date.Format $dateFormat }} </time> 
 {{ end }}
           </header>
           <article class="post__content">
