@@ -135,6 +135,7 @@ Every workflow is described in a seperate yaml file located in your repository:
 
 You can either create your workflow in GitHub's frontend or locally and push it to GitHub's repository afterwards. Lets create the file locally and edit it in your local repository:
 
+    mkdir .github/workflows
     code .github/workflows/build-deploy-site.yml
 
 ### Basic structure of a workflow
@@ -167,29 +168,36 @@ Each step gets a name and in this case, uses a predefined GitHub Action.
         - name: Git checkout
             uses: actions/checkout@v3
 
-### Setup Hugo
+### Optional: Install git
 
-The next step will setup Hugo by defining the version to use, creating a directory for it and downloading the specific version into the github-runner. Afterwards the binary will be made available to every user by moving it into `/usr/local/bin`.
+Hugo's GitInfo variables, `.GitInfo.AuthorDate` in particular, delivered wrong dates back once I have deployed my site. Locally everything worked as expected. Apparently some git config is needed: `git config --global core.quotepath false`
 
-        - name: Setup Hugo
-            env:
-            HUGO_VERSION: 0.111.3
+In order to make any changes to the git config on the github-runner, git has to be installed. So I added another step to do that:
+
+      - name: Install git
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq --no-install-recommends git
+          git config --global core.quotepath false    
+
+
+### Install Hugo
+
+The next step will install and setup Hugo via `apt-get`.
+
+        - name: Install Hugo
             run: |
-            mkdir ~/hugo
-            cd ~/hugo
-            curl -L "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" --output hugo.tar.gz
-            tar -xvzf hugo.tar.gz
-            sudo mv hugo /usr/local/bin
+            sudo apt-get update
+            sudo apt-get install -yq --no-install-recommends hugo
 
 Now Hugo is installed and can build your site. This is also the first time we use a predefined [GitHub variable](https://docs.github.com/en/actions/learn-github-actions/variables): `{{ github.workspace }}` which will point to our checked out repository. 
 
 In order to only deploy the built site later and have it not mixed into the repository, Hugo should deploy the site to the subfolder `htdocs`.
 
-        # Build Hugo site to subfolder htdocs
-        - name: Build
+        - name: Build Hugo site
             run: hugo -d ${{ github.workspace }}/htdocs --minify
 
-### Wireguard
+### Optional: Setup Wireguard
 
 The next step is optional, but showcases another user generated action and the heavy use of GitHub encrypted secrets for sensitive data. Since my sshd is only accessible inside my VPN, I have to setup Wireguard inside the github-runner to deploy the site via SSH (scp) later.
 
