@@ -12,7 +12,7 @@
     <li class="post">
       <div class="post__header">
         <time class="post__date" datetime="{{ .Lastmod }}"
-          >{{ .Date.Format $dateFormat }}</time>
+          >{{ .Lastmod.Format $dateFormat }}</time>
         <h2 class="post__title">
           <a href="{{.RelPermalink}}">{{ .Title }}</a>
         </h2>
