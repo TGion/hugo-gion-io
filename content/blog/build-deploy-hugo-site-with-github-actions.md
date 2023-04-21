@@ -36,7 +36,7 @@ Please take care of the following before you continue:
 
 ## Set up GitHub related access
 
-### Create and add ssh keys for access to the git repository
+### Setup access to the git repository
 
 In order to access your git repository from your local machine, you need to setup a SSH access to GitHub. 
 
