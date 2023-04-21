@@ -8,6 +8,13 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v3
 
+      # I guess git is not installed and therefore GitInfo variables are not working in Hugo
+      - name: Set up git
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq --no-install-recommends git
+          git --version
+      
       - name: Setup Hugo
         env:
           HUGO_VERSION: 0.111.3
