@@ -16,7 +16,7 @@ I love to get in touch with like-minded people. So if you want to reach out to m
 ```
 tobias [at] gion [dot] io
 ```
-Here is my [public key](/pgp_pub_tobias_at_gion_io.asc), or use the corresponding fingerprint to import the public key into your keychain.
+Here is my [public key](/public/pgp_pub_tobias_at_gion_io.asc), or use the corresponding fingerprint to import the public key into your keychain.
 
 ```
 gpg --recv-keys 8ABA9EEC9E6CD42E114BAF2D8F21F2F5FD822E20
