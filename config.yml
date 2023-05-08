@@ -32,15 +32,15 @@ markup:
     renderer:
       unsafe: false
       
-frontmatter:
-  date:
-    - date
-    - publishDate
-    - lastmod
-  lastmod:
-    - :git
-    - lastmod
-    - :fileModTime
+# frontmatter:
+#  date:
+#    - date
+#    - publishDate
+#    - lastmod
+#  lastmod:
+#    - :git
+#    - lastmod
+#    - :fileModTime
   
 menu:
   main:
