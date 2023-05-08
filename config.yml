@@ -38,6 +38,7 @@ frontmatter:
     - publishDate
     - lastmod
   lastmod:
+    - :git
     - lastmod
     - :fileModTime
   
