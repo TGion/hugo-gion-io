@@ -164,7 +164,7 @@ Lets dive into it!
 
 The first step checks out the git repository (on GitHub ofcourse) to the github-runner. There it is avaiable as long as the workflows runs and therefore the VM is active.
 Each step gets a name and in this case, uses a predefined GitHub Action.
-Optionally, if you use the .GitInfo variable, you should fetch the complete history when doing a git checkout.
+Optionally, if you use the .GitInfo variable, you should fetch the complete history when doing a git checkout. Thanks goes to [jjameson](https://discourse.gohugo.io/t/problems-with-gitinfo-in-ci/22480)!
 
         - name: Git checkout
             uses: actions/checkout@v3
