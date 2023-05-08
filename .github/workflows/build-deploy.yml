@@ -7,9 +7,9 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
+        # Fetch all history for .GitInfo and .Lastmod
         with:
-          ...
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          fetch-depth: 0    
       
       # Needed for .GitInfo variable .AuthorDate to work after deployment: git config --global core.quotepath false
       - name: Install git
