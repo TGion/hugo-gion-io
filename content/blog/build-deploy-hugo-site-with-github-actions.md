@@ -8,14 +8,14 @@ draft: false
 description: "Create GitHub Actions to automatically build and deploy a Hugo site via SSH and WireGuard to a private web server."  
 keywords: [web, git, github, actions, ssh, wireguard, ci/cd]  
 
-tags: [bsd, git, web]  
+tags: [git, web]  
 toc: true
 
 ---
 
-To build my site I use the static site generator Hugo. The process of editing the Markdown source files and afterwards building the site to deploy it to my website directory, is somewhat old-fashioned: Edit the files with Nextcloud, fire up my VPN, login with ssh and build the site with an alias to deploy it to my directory. Well...
+To build my site I use the static site generator [Hugo](https://gohugo.io/). The process of editing the Markdown source files and afterwards building the site to deploy it to my website directory, is somewhat old-fashioned: Edit the files with Nextcloud, fire up my VPN, login with ssh and build the site with an alias to deploy it to my directory. Well...
 
-So to adress this issue, I gave the CI/CD system of GitHub Actions and want to share my expierences with you.
+So to adress this issue, I gave the CI/CD system of GitHub Actions a try and want to share my expierences with you.
 
 ## Goals
 
