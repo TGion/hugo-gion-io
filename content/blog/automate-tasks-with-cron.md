@@ -1,11 +1,11 @@
 ---
 
-title: "Automate tasks with cron, periodic.conf and at"  
+title: "Automate tasks with cron, periodic and at"  
 date: 2023-05-29T08:00:00+02:00  
 
 draft: false  
 
-description: "Configure automated system and user tasks with integrated FreeBSD system tools cron, periodic.conf and create new tasks. Deliver reports via mail with dma to the system user."  
+description: "Configure automated system and user tasks with integrated FreeBSD system tools cron, periodic and create new tasks. Deliver reports via mail with dma to the system user."  
 keywords: [freebsd, automation, cron, periodic.conf]  
 
 tags: [bsd]  
@@ -15,7 +15,7 @@ toc: true
 
 Running and maintaining a server often requires regular jobs, scripts, command to be run in order to keep the system running smooth. Think of log rotations, disk cleanups, flushing mail queues, etc.
 
-FreeBSD not only offers a great set of tools with cron, periodic.conf and at, but also those tools are tightly integrated into the base system. Which is always good news for security, compatibility and performance.
+FreeBSD not only offers a great set of tools with [cron](https://man.freebsd.org/cgi/man.cgi?cron), [periodic](https://man.freebsd.org/cgi/man.cgi?periodic(8)) and [at](https://man.freebsd.org/cgi/man.cgi?query=at&sektion=1&manpath=FreeBSD+13.2-RELEASE+and+Ports), but also those tools are tightly integrated into the base system. Which is always good news for security, compatibility and performance.
 
 ## Goals
 
@@ -23,7 +23,7 @@ After the completion of this guide, you will be able to:
 
 1. Create individual automation tasks for different users.
 2. Configure and extend the Unix (FreeBSD) periodic system as well as enable mail delivered reports.
-3. Use [at](https://man.freebsd.org/cgi/man.cgi?query=at&sektion=1&manpath=FreeBSD+13.2-RELEASE+and+Ports) to independently run time-consuming tasks once.
+3. Use `at` to independently run time-consuming tasks once.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ Nothing special. I assume you have some basic knowledge about Unix systems and h
 
 ## Crontab
 
-I used to run every automated task through (different) user's crontab files. Although I have learned to use more elegant ways for automation, the user's crontab remains a valid configuration for repetative jobs, if (in my humble opinion):
+I used to run every automated task through (different) user's crontab files. Although I have learned to use more elegant ways for automation, the user's crontab remains a valid configuration for repetative jobs, if:
 
 1. It is a individual task for a specific user and not useful for the system or other users.
 2. The task need's to run several times a day.
@@ -43,6 +43,7 @@ In order to setup automation via crontab, the user's crontab file must be edited
 Every user on the system has a crontab file (including root). Depending on your role on the server (user / admin), security concerns or permissions, you can either setup cron's for your own user, a different user or root itself.
 
 To edit your own crontab (can also be root if logged in as), you have to run:
+
     crontab -e
 
 
@@ -54,18 +55,13 @@ If you want to edit another user's file, you simply have to add `-u [user]`. Eve
 
 Every entry of the crontab file consists of the command or and the time at which it should run (we will discuss environment settings later). I urge you to read the [manpage](https://man.freebsd.org/cgi/man.cgi?query=crontab&sektion=5&manpath=FreeBSD+13.2-RELEASE+and+Ports) for more details, but the basic usage is as follows:
 
-    #   minute  hour	mday	month	wday	command
+    ### minute  hour	mday	month	wday	command
     
-    #   Flush dma mail queue every 30 minutes
+    ### Flush dma mail queue every 30 minutes
         */30    *       *       *       * 	    /usr/libexec/dma -q
     
-    #   Every 3 hours update PF's firewall rules (with pf-badhost)
+    ### Every 3 hours update PF's firewall rules 
         0       */3     *       *       *	    pf-badhost -O freebsd
-
-    #   Once a day (00:00), remove abusive hosts from the pf block list
-        0       0       *       *       *       /sbin/pfctl -t badhosts -T expire 86400
-
-    #   Check every 12 hours for a certificate renewal
 
 
 ### Setting environment in crontab
@@ -107,8 +103,8 @@ FreeBSD comes with several pre-configured periodical jobs for regular system mai
 
 The default settings when they are run can be configured in `/etc/crontab`:
 
-    #   minute	hour	mday	month	wday	who	    command
-    #   Perform daily/weekly/monthly maintenance.
+    ### minute	hour	mday	month	wday	who	    command
+    ### Perform daily/weekly/monthly maintenance.
         1	    2	    *	    *	    *	    root	periodic daily
         15	    4	    *	    *	    6   	root	periodic weekly
         30	    5	    1	    *	    *	    root	periodic monthly
@@ -128,7 +124,7 @@ User and 3rd party periodics are (and should be) located in:
     /usr/local/etc/periodic/monthly
     /usr/local/etc/periodic/security
 
-Scripts in those directories are run in order of their file name. To prioritize them, a numeric prefix is added. E.g.: `100.clean-disks`. After you have deviced when to run your script, you can create a new file (or copy an existing job) in the appropiate directory, e.g. `/usr/local/etc/periodic/daily`:
+Scripts in those directories are run in order of their file name. To prioritize them, a numeric prefix is added, e.g.: `100.clean-disks`. After you have decided when to run your script, you can create a new file (or copy an existing job) in the appropiate directory, e.g. `/usr/local/etc/periodic/daily`:
 
 We will create a new periodic job to check for updates of our installed packages and update them accordingly. Create a file `/usr/local/etc/periodic/daily/412.pkg-updates`:
 
@@ -215,7 +211,7 @@ If you don't have a mail server running you can you use [dma - a small mail tran
 
 If you have time intensive jobs to run, you may not want your periodic system to wait for them. E.g. you want your daily reports as soon as possible to check for failures.
 
-To de-couple intensive jobs FreeBSD offers us [at](https://man.freebsd.org/cgi/man.cgi?query=at&sektion=1) to queue jobs for delayed execution. Since those jobs are again picked up by another cron jobs (consistency anyone?), it will run independent from our periodic system.
+To de-couple intensive jobs FreeBSD offers us `at` to queue jobs for delayed execution. Since those jobs are again picked up by another cron jobs (consistency anyone?), it will run independent from our periodic system.
 
 By default at expects it's jobs to be entered interactive. Not much use for scripts, so you can create a job file to list the commands you want to run. In my example I run [synth](https://github.com/jrmarino/synth) to build new port updates. Here is `synth-jobs`:
 
