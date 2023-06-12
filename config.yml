@@ -18,16 +18,11 @@ params:
  
 markup:
   highlight:
-    codeFences: false
-    guessSyntax: false
-    tabWidth: ""
-    anchorLineNos: false
+    codeFences: true
+    tabWidth: "8"
     lineAnchors: ""
-    style: ""
-    lineNos: false
-    lineNumbersInTable: false
-    noClasses: false
-    
+    style: "github"
+
   goldmark:
     renderer:
       unsafe: false
