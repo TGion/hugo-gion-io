@@ -13,7 +13,7 @@ toc: false
 
 ---
 
-To automate the process of issuing and renewing TLS wildcard certificates we use [acme.sh](https://github.com/acmesh-official/acme.sh/) - A pure Unix shell script implementing ACME client protocol. To complete the DNS challenge without manually adding TXT records, we are supported by the [Namecheap API](https://www.namecheap.com/support/api/intro/) in this guide.
+To automate the process of issuing and renewing TLS wildcard certificates we use [acme.sh](https://github.com/acmesh-official/acme.sh/) - A pure Unix posh script implementing ACME client protocol. To complete the DNS challenge without manually adding TXT records, we are supported by the [Namecheap API](https://www.namecheap.com/support/api/intro/) in this guide.
 
 ## Goals
 
@@ -34,7 +34,7 @@ Although I prefer the installation via the FreeBSD ports collection for maintena
 
 Login as root, update the ports collection and configure the port (if desired) for acme.sh.
 
-```shell
+```bash
 su
 cd /usr/ports
 make update
@@ -48,7 +48,7 @@ If you want to change the default port configuration, now is your chance. I have
 
 When you are done, it is time to build and install the port.
 
-```shell
+```bash
 make install clean
 ```
 
@@ -93,7 +93,7 @@ Also the Namecheap API credentials have been added. More information on setting 
 
 The last configuration is setting your default / preferred CA's server address. By default, acme.sh uses ZeroSSL. In our example we use Let's Encrypt instead. Changes can be made directly to the configuration file or by calling:
 
-```shell
+```bash
 acme.sh --set-default-ca --server https://acme-v02.api.letsencrypt.org
 ```
 
@@ -108,7 +108,7 @@ where *domain.tld* is the name of your domain you issued your certificate for.
 
 Since FreeBSD creates a new user / group for acme which has no permissions to write into */var/log*, a log file must be manually created and the appropriate permissions must be set. This has to be only done once as user root.
 
-```shell
+```bash
 su
 touch /var/log/acme.sh.log
 chown acme:acme /var/log/acme.sh.log
@@ -125,7 +125,7 @@ It is possible to setup *newsyslogd* for the logfiles. FreeBSD installs the nece
 
 Restart *newsyslog* after changes have been made.
 
-```shell
+```bash
 service newsyslog restart
 ```
 
@@ -135,13 +135,13 @@ Now it is time to issue our certificate. Based on the issue command, acme.sh add
 
 First, login as user acme.
 
-```shell
+```bash
 su acme
 ```
 
 For my configuration, I issued my certificates with the following command.
 
-```shell
+```bash
 acme.sh --issue \
 --dns dns_namecheap \
 --domain domain.tld -d *.domain.tld \
@@ -162,7 +162,7 @@ To go briefly trough the parameters:
 
 ### Reload script
 
-```shell
+```bash
 # /var/db/acme/services.restart
 
 #!/bin/sh
@@ -192,7 +192,7 @@ To automatically renew all our previously issued certificates acme.sh delivers a
 
 As user acme edit the crontab file with the following command:
 
-```shell
+```bash
 crontab -e
 ```
 
@@ -208,7 +208,7 @@ It will run the command acme.sh in the cron mode every day at 0:10 system time. 
 
 You can test run the cron job with to confirm everything works as intended:
 
-```shell
+```bash
 acme.sh --cron --test
 ```
  
