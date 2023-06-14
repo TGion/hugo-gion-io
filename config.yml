@@ -21,7 +21,7 @@ markup:
     codeFences: true
     tabWidth: "8"
     lineAnchors: ""
-    style: "github"
+    style: "xcode"
 
   goldmark:
     renderer:
