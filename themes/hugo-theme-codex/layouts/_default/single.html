@@ -11,6 +11,10 @@
           <header class="post__header">
             <h1 id="post__title">{{.Title}}</h1>
 
+{{ if .PublishDate }}<time datetime="{{ .PublishDate }}"  
+class="post__date">published: {{ .PublishDate.Format $dateFormat }} - </time>
+{{ end }}
+
 {{ if .Lastmod }}<time datetime="{{ .Lastmod }}"  
 class="post__date">last modified: {{ .Lastmod.Format $dateFormat }} by {{ .GitInfo.AuthorName }} </time>
 {{ end }}
