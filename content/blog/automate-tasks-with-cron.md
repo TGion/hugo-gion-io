@@ -227,9 +227,9 @@ The periodic system by default sends a summary report about every periodic scrip
 
 Those mails are locally sent to the user `root`. If you want to them to be delivered to an external mail address, you have to edit `/etc/aliases` and add an mail adress to root:
 
-```
+
 root:   mail@address.tld
-```
+
 
 If you don't have a mail server running you can you use [dma - a small mail transport agent](https://github.com/corecode/dma). I will show you in a another post how to set it up. Or you use another awesome blog post about [Setting up dma with FreeBSD](https://herrbischoff.com/2021/10/freebsd-13-simple-outgoing-email-with-dma/).
 
