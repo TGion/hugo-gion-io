@@ -3,7 +3,7 @@
     right: 0;
     padding: 5px 7px 3px 7px;
     margin: 5px;
-    color: #a5d6ff;
+    color: #bb8af7;
     background-color: #000000;
     border: 0px solid #000000;
     border-radius: 4px;
@@ -13,7 +13,7 @@
     transition: 0.1s;
   }
   .clipboard-button > svg {
-    fill: #767676;
+    fill: #dddddd;
   }
   .clipboard-button:hover {
     cursor: pointer;
@@ -22,7 +22,7 @@
     border: 0px solid;
   }
   .clipboard-button:hover > svg {
-    fill: #a5d6ff;
+    fill: #bb8af7;
   }
   .clipboard-button:focus {
     outline: 0;
