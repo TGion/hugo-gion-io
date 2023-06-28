@@ -14,6 +14,8 @@ tags: [generic]
 \# Uses math typesetting math: false  
 toc: false
 
+image: welcome.png
+
 ---
 
 This is a simple blog post to test Hugo features.
