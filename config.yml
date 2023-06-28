@@ -13,7 +13,7 @@ enableGitInfo: true
 
 params:
   dateFormat: 2 Jan 2006
-  description: Your open source for privacy related topics, FreeBSD-based systems and computer security.    
+  description: Personal blog of Tobias Gion about open source, data privacy related topics, FreeBSD-based systems and computer security.    
   showPageTitleInTOC: false
  
 markup:
