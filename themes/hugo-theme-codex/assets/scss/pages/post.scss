@@ -115,6 +115,12 @@ $tocBreakpoint: 1024px;
       color: rgb(204, 204, 204);
     }
   }
+
+  a:hover {
+    @media (prefers-color-scheme: dark) {
+      color: rgb(204, 204, 204);
+    }
+  }
 }
 
 .tags__list {
@@ -139,12 +145,12 @@ $tocBreakpoint: 1024px;
   text-decoration: none;
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  background: lighten($primary, 41%);
+  background: lighten($black, 10%);
   color: $primary;
   font-size: 0.8rem;
 
   &:hover {
-    background: lighten($primary, 38%);
+    background: lighten($black, 20%);
   }
 }
 
