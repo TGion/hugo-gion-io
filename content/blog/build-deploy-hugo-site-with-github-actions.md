@@ -171,7 +171,7 @@ code .github/workflows/build-deploy-site.yml
 
 The basic layout is the following:
 
-```
+```yaml
 name: Build and deploy Hugo site on my website
 on: [push, workflow_dispatch]  
 jobs:
@@ -197,7 +197,7 @@ The first step checks out the git repository (on GitHub ofcourse) to the github-
 Each step gets a name and in this case, uses a predefined GitHub Action.
 Optionally, if you use the .GitInfo variable, you should fetch the complete history when doing a git checkout. Thanks goes to [jjameson](https://discourse.gohugo.io/t/problems-with-gitinfo-in-ci/22480)!
 
-```
+```yaml
 - name: Git checkout
     uses: actions/checkout@v3
     # Optional: Fetch all history for .GitInfo and .Lastmod
@@ -211,7 +211,7 @@ Hugo's GitInfo variables, `.GitInfo.AuthorDate` in particular, delivered wrong d
 
 In order to make any changes to the git config on the github-runner, git has to be installed. So I added another step to do that:
 
-```
+```yaml
 - name: Install git
     run: |
     sudo apt-get update
@@ -223,7 +223,7 @@ In order to make any changes to the git config on the github-runner, git has to 
 
 The next step will install and setup Hugo via `apt-get`.
 
-```
+```yaml
 - name: Install Hugo
     run: |
     sudo apt-get update
@@ -234,7 +234,7 @@ Now Hugo is installed and can build your site. This is also the first time we us
 
 In order to only deploy the built site later and have it not mixed into the repository, Hugo should deploy the site to the subfolder `htdocs`.
 
-```
+```yaml
 - name: Build Hugo site
     run: hugo -d ${{ github.workspace }}/htdocs --minify
 ```
@@ -243,7 +243,7 @@ In order to only deploy the built site later and have it not mixed into the repo
 
 The next step is optional, but showcases another user generated action and the heavy use of GitHub encrypted secrets for sensitive data. Since my sshd is only accessible inside my VPN, I have to setup Wireguard inside the github-runner to deploy the site via SSH (scp) later.
 
-```
+```yaml
 # Need to install wireguard to access the server (ssh only allowed inside vpn)
 - name: Set up WireGuard
     uses: egor-tensin/setup-wireguard@v1
@@ -296,7 +296,7 @@ HOSTNAME_OR_IP ssh-ed25519 PUBLIC_KEY_HASH
 
 Now the github-runner will setup the private ssh key and the known_hosts file so it can access your server via ssh.
 
-```
+```yaml
 - name: Install SSH Key
     run: |
     install -m 600 -D /dev/null ~/.ssh/id_ed25519
@@ -310,7 +310,7 @@ Finally it is time to deploy your site onto your webserver. For this task `scp` 
 
 For the purpose of this guide, the location of the web directory for the Hugo site will be in `/usr/local/www/hugo-site`. This, ofcourse, can and probably will differ from your installation.
 
-```
+```yaml
 # Deploy site from subfolder htdocs to the webserver 
 - name: Deploy
     run: scp -r htdocs/* github@HOSTNAME_OR_IP:/usr/local/www/hugo-site

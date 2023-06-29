@@ -66,7 +66,7 @@ There are two types of configuration files used by acme.sh.
 
 The first one is the global (or account) configuration. These settings are necessary (and valid) for every domain you issue. Lets have a look.
 
-```
+```bash
 # /var/db/acme/.acme.sh/account.conf
 
 # needed if one uses DNS alias mode
@@ -162,7 +162,7 @@ To go briefly trough the parameters:
 
 ### Reload script
 
-```
+```bash
 # /var/db/acme/services.restart
 
 #!/bin/sh

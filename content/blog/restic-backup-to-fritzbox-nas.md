@@ -207,7 +207,7 @@ chmod 700 restic-backup.sh
 
 Use your [favorite editor](https://micro-editor.github.io/) ```restic-backup.sh``` to create your script:
 
-```
+```bash
 #/bin/sh
 
 # Init

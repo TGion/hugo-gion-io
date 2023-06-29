@@ -36,7 +36,7 @@ The description holds meta information for the page (e.g. title, keywords, tags,
 
 For this page the description looks like this:
 
-```
+```yaml
 title: "Hello World"
 date: 2022-09-19T14:36:00+02:00
 draft: false

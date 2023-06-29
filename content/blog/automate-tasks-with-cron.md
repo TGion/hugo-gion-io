@@ -72,7 +72,7 @@ Every entry of the crontab file consists of the command or and the time at which
 
 Crontab's are run with `/bin/bash` in a "clean" environment. This means, it may be necessary for you to take care of environment settings (e.g.):
 
-```
+```bash
 # Override default shell
 SHELL=/bin/sh
 
@@ -142,7 +142,7 @@ Scripts in those directories are run in order of their file name. To prioritize 
 
 We will create a new periodic job to check for updates of our installed packages and update them accordingly. Create a file `/usr/local/etc/periodic/daily/412.pkg-updates`:
 
-```
+```bash
 #!/bin/sh -
 #
 # $FreeBSD$
@@ -161,7 +161,7 @@ For every periodic this is the default which can be used every time. It defines 
 
 Now we add the ability to enable / disable our script through `/etc/periodic.conf`:
 
-```
+```bash
 case "$daily_pkg_updates_enable" in
     [Yy][Ee][Ss])
 
@@ -175,7 +175,7 @@ esac
 
 So the complete script will be:
 
-```
+```bash
 #!/bin/sh -
 #
 # $FreeBSD$
@@ -241,7 +241,7 @@ To de-couple intensive jobs FreeBSD offers us `at` to queue jobs for delayed exe
 
 By default at expects it's jobs to be entered interactive. Not much use for scripts, so you can create a job file to list the commands you want to run. In my example I run [synth](https://github.com/jrmarino/synth) to build new port updates. Here is `synth-jobs`:
 
-```
+```bash
 # Here comes a list of commands
 # Needed for synth to run in scripts
 export TERM=dumb
