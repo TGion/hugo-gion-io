@@ -44,13 +44,13 @@ Every user on the system has a crontab file (including root). Depending on your 
 
 To edit your own crontab (can also be root if logged in as), you have to run:
 
-```bash
+```
 crontab -e
 ```
 
 If you want to edit another user's file, you simply have to add `-u [user]`. Every job in the user's crontab will then be executed as the designated user:
 
-```bash
+```
 crontab -e -u joe
 ```
 
@@ -58,7 +58,7 @@ crontab -e -u joe
 
 Every entry of the crontab file consists of the command or and the time at which it should run (we will discuss environment settings later). I urge you to read the [manpage](https://man.freebsd.org/cgi/man.cgi?query=crontab&sektion=5&manpath=FreeBSD+13.2-RELEASE+and+Ports) for more details, but the basic usage is as follows:
 
-```bash
+```
 ### minute  hour	mday	month	wday	command
 
 ### Flush dma mail queue every 30 minutes
@@ -72,7 +72,7 @@ Every entry of the crontab file consists of the command or and the time at which
 
 Crontab's are run with `/bin/bash` in a "clean" environment. This means, it may be necessary for you to take care of environment settings (e.g.):
 
-```bash
+```
 # Override default shell
 SHELL=/bin/sh
 
@@ -102,7 +102,7 @@ The periodic system consists of a binary `periodic` and a directory structure `d
 
 FreeBSD comes with several pre-configured periodical jobs for regular system maintenance. They are located in:
 
-```bash
+```
 /etc/periodic/daily
 /etc/periodic/weekly
 /etc/periodic/monthly
@@ -111,7 +111,7 @@ FreeBSD comes with several pre-configured periodical jobs for regular system mai
 
 The default settings when they are run can be configured in `/etc/crontab`:
 
-```bash
+```
 ### minute	hour	mday	month	wday	who	    command
 ### Perform daily/weekly/monthly maintenance.
     1	    2	    *	    *	    *	    root	periodic daily
@@ -121,7 +121,7 @@ The default settings when they are run can be configured in `/etc/crontab`:
 
 To configure how and what jobs should be run, you need to edit `/etc/periodic.conf`, which is empty by default. I suggest you copy the *default* one from:
 
-```bash
+```
 cp /etc/defaults/periodic.conf /etc/periodic.conf
 ```
 
@@ -131,7 +131,7 @@ and edit it for your needs. Entries which should run with their default settings
 
 User and 3rd party periodics are (and should be) located in:
 
-```bash
+```
 /usr/local/etc/periodic/daily
 /usr/local/etc/periodic/weekly
 /usr/local/etc/periodic/monthly
@@ -142,7 +142,7 @@ Scripts in those directories are run in order of their file name. To prioritize 
 
 We will create a new periodic job to check for updates of our installed packages and update them accordingly. Create a file `/usr/local/etc/periodic/daily/412.pkg-updates`:
 
-```bash
+```
 #!/bin/sh -
 #
 # $FreeBSD$
@@ -161,7 +161,7 @@ For every periodic this is the default which can be used every time. It defines 
 
 Now we add the ability to enable / disable our script through `/etc/periodic.conf`:
 
-```bash
+```
 case "$daily_pkg_updates_enable" in
     [Yy][Ee][Ss])
 
@@ -175,7 +175,7 @@ esac
 
 So the complete script will be:
 
-```bash
+```
 #!/bin/sh -
 #
 # $FreeBSD$
@@ -209,13 +209,13 @@ esac
 
 Make sure your new file can be executed:
 
-```bash
+```
 chmod +x /usr/local/etc/periodic/daily/412.pkg-updates
 ```
 
 Since we added the ability to control our periodic in `/etc/periodic.conf` we need to enable it:
 
-```bash
+```
 echo 'daily_pkg_updates_enable="YES"' >> /etc/periodic.conf
 ```
 
@@ -241,7 +241,7 @@ To de-couple intensive jobs FreeBSD offers us `at` to queue jobs for delayed exe
 
 By default at expects it's jobs to be entered interactive. Not much use for scripts, so you can create a job file to list the commands you want to run. In my example I run [synth](https://github.com/jrmarino/synth) to build new port updates. Here is `synth-jobs`:
 
-```bash
+```
 # Here comes a list of commands
 # Needed for synth to run in scripts
 export TERM=dumb
@@ -252,7 +252,7 @@ echo "Build packages and upgrade system:"
 
 Now you can tell `at` to run you job file and mail the results to the user who fired the job:
 
-```bash
+```
 at -m -f synth-jobs now
 ```
 

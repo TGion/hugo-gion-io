@@ -34,7 +34,7 @@ Although I prefer the installation via the FreeBSD ports collection for maintena
 
 Login as root, update the ports collection and configure the port (if desired) for acme.sh.
 
-```bash
+```
 su
 cd /usr/ports
 make update
@@ -48,7 +48,7 @@ If you want to change the default port configuration, now is your chance. I have
 
 When you are done, it is time to build and install the port.
 
-```bash
+```
 make install clean
 ```
 
@@ -66,7 +66,7 @@ There are two types of configuration files used by acme.sh.
 
 The first one is the global (or account) configuration. These settings are necessary (and valid) for every domain you issue. Lets have a look.
 
-```bash
+```
 # /var/db/acme/.acme.sh/account.conf
 
 # needed if one uses DNS alias mode
@@ -93,7 +93,7 @@ Also the Namecheap API credentials have been added. More information on setting 
 
 The last configuration is setting your default / preferred CA's server address. By default, acme.sh uses ZeroSSL. In our example we use Let's Encrypt instead. Changes can be made directly to the configuration file or by calling:
 
-```bash
+```
 acme.sh --set-default-ca --server https://acme-v02.api.letsencrypt.org
 ```
 
@@ -108,7 +108,7 @@ where *domain.tld* is the name of your domain you issued your certificate for.
 
 Since FreeBSD creates a new user / group for acme which has no permissions to write into */var/log*, a log file must be manually created and the appropriate permissions must be set. This has to be only done once as user root.
 
-```bash
+```
 su
 touch /var/log/acme.sh.log
 chown acme:acme /var/log/acme.sh.log
@@ -116,7 +116,7 @@ chown acme:acme /var/log/acme.sh.log
 
 It is possible to setup *newsyslogd* for the logfiles. FreeBSD installs the necessary script. If desired, it can be enabled.
 
-```bash
+```
 # /usr/local/etc/newsyslog.d/acme.sh
 
 # logfilename         [owner:group]   mode count size when  flags [/pid_file] [sig_num]
@@ -125,7 +125,7 @@ It is possible to setup *newsyslogd* for the logfiles. FreeBSD installs the nece
 
 Restart *newsyslog* after changes have been made.
 
-```bash
+```
 service newsyslog restart
 ```
 
@@ -135,13 +135,13 @@ Now it is time to issue our certificate. Based on the issue command, acme.sh add
 
 First, login as user acme.
 
-```bash
+```
 su acme
 ```
 
 For my configuration, I issued my certificates with the following command.
 
-```bash
+```
 acme.sh --issue \
 --dns dns_namecheap \
 --domain domain.tld -d *.domain.tld \
@@ -162,7 +162,7 @@ To go briefly trough the parameters:
 
 ### Reload script
 
-```bash
+```
 # /var/db/acme/services.restart
 
 #!/bin/sh
@@ -192,13 +192,13 @@ To automatically renew all our previously issued certificates acme.sh delivers a
 
 As user acme edit the crontab file with the following command:
 
-```bash
+```
 crontab -e
 ```
 
 And add the following line to your crontab file:
 
-```bash
+```
 10 0 * * * /usr/local/sbin/acme.sh --cron --home "/var/db/acme/.acme.sh" > /dev/null
 ```
 
@@ -208,7 +208,7 @@ It will run the command acme.sh in the cron mode every day at 0:10 system time. 
 
 You can test run the cron job with to confirm everything works as intended:
 
-```bash
+```
 acme.sh --cron --test
 ```
  

@@ -42,7 +42,7 @@ In order to access your git repository from your local machine, you need to setu
 
 First, lets create SSH keys for your user account. If you already have keys for your user, you can skip this step:
 
-```bash
+```
 ssh-keygen -t ed25519
 ```
 
@@ -50,7 +50,7 @@ You can add a passphrase to make it more secure. The downside is, you have to en
 
 Now you need to export the **public** part of the key-pair and add it to GitHub in order to access *any* public repository on GitHub with `git`.
 
-```bash
+```
 cat .ssh/id_ed25519.pub
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBzLyW82qB03GD264sG5/HHOTKdFMvtq2yggxwSxLeui user@localhost
 ```
@@ -65,7 +65,7 @@ To deploy the generated website onto your webserver, it needs access to website 
 Create a user. For the purpose of this guide we will call her `github`.
 On FreeBSD this will be done with:
 
-```bash
+```
 adduser github
 ```
 
@@ -74,13 +74,13 @@ The user needs a home directory for the ssh keys and a login shell for the scp c
 
 Login as the newly created user 'github' and create a pair of ssh keys **without** a passphrase:
 
-```bash
+```
 ssh-keygen -t ed25519
 ```
 
 The private key will be added to the secret vault in GitHub Actions later. The public key has to be added to the *authorized_keys* of the user 'github' so the github-runner can login to your webserver via the pubkey authentification:
 
-```bash
+```
 cat /home/github/.ssh/id_ed25519.pub >> /home/github/.ssh/authorized_keys
 ```
 
@@ -92,7 +92,7 @@ First you need to create an empty git repository on the GitHub website. For the 
 
 Once you have created the repository, you can copy its SSH link. The link can be found in the tab `Code` within the dropdown (green) `Code`. It has the format of:
 
-```bash
+```
 git@github.com:[your-github-user/hugo-website.git]
 ```
 
@@ -100,45 +100,45 @@ git@github.com:[your-github-user/hugo-website.git]
 
 Login with your local user account and go to the source of your Hugo website (locally or wherever you are editing your site) to setup your local git repository:
 
-```bash
+```
 cd hugo-website
 git init
 ```
 
 You can add any existing files to the repository by typing:
 
-```bash
+```
 git add *
 ```
 
 Optionaly, if you have files you don't want to track, you can add them to `.gitignore`:
 
-```bash
+```
 echo "personal/some-files" >> .gitignore
 git add .gitignore
 ```
 
 Commit your changes with the commit message *initial commit* to the local repository:
 
-```bash
+```
 git commit -m "inital commit"
 ```
 
 Now you have to add your GitHub repository so you can push and pull your changes to it. The link can be found in on the GitHub website in your repository as mentioned in the previous section:
 
-```bash
+```
 git remote add origin git@github.com:[your-github-user/hugo-website.git]
 ```
 
 Now select your local repository to be the main branch:
 
-```bash
+```
 git branch -M main
 ```
 
 And last but not least, push your local repository to GitHub. If you have created your SSH keys with a passphrase, you have to enter it every time you access your repository:
 
-```bash
+```
 git push -u origin main
 ```
 
@@ -156,13 +156,13 @@ Once triggered (can be also manually) the workflow is picked up by a github-runn
 
 Every workflow is described in a seperate yaml file located in your repository:
 
-```bash
+```
 .github/workflows
 ```
 
 You can either create your workflow in GitHub's frontend or locally and push it to GitHub's repository afterwards. Lets create the file locally and edit it in your local repository:
 
-```bash
+```
 mkdir .github/workflows
 code .github/workflows/build-deploy-site.yml
 ```
@@ -171,14 +171,14 @@ code .github/workflows/build-deploy-site.yml
 
 The basic layout is the following:
 
-```yaml
-    name: Build and deploy Hugo site on my website
-    on: [push, workflow_dispatch]  
-    jobs:
-    deploy:
-        name: Build and Deploy
-        runs-on: ubuntu-latest
-        steps:
+```
+name: Build and deploy Hugo site on my website
+on: [push, workflow_dispatch]  
+jobs:
+deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
 ```
 
 It consists of the **name** of your workflow. Be creative!
@@ -197,12 +197,12 @@ The first step checks out the git repository (on GitHub ofcourse) to the github-
 Each step gets a name and in this case, uses a predefined GitHub Action.
 Optionally, if you use the .GitInfo variable, you should fetch the complete history when doing a git checkout. Thanks goes to [jjameson](https://discourse.gohugo.io/t/problems-with-gitinfo-in-ci/22480)!
 
-```yaml
-    - name: Git checkout
-        uses: actions/checkout@v3
-        # Optional: Fetch all history for .GitInfo and .Lastmod
-        with:
-            fetch-depth: 0    
+```
+- name: Git checkout
+    uses: actions/checkout@v3
+    # Optional: Fetch all history for .GitInfo and .Lastmod
+    with:
+        fetch-depth: 0    
 ```
 
 ### Optional: Install git
@@ -211,61 +211,61 @@ Hugo's GitInfo variables, `.GitInfo.AuthorDate` in particular, delivered wrong d
 
 In order to make any changes to the git config on the github-runner, git has to be installed. So I added another step to do that:
 
-```bash
-    - name: Install git
-        run: |
-        sudo apt-get update
-        sudo apt-get install -yq --no-install-recommends git
-        git config --global core.quotepath false    
+```
+- name: Install git
+    run: |
+    sudo apt-get update
+    sudo apt-get install -yq --no-install-recommends git
+    git config --global core.quotepath false    
 ```
 
 ### Install Hugo
 
 The next step will install and setup Hugo via `apt-get`.
 
-```yaml
-    - name: Install Hugo
-        run: |
-        sudo apt-get update
-        sudo apt-get install -yq --no-install-recommends hugo
+```
+- name: Install Hugo
+    run: |
+    sudo apt-get update
+    sudo apt-get install -yq --no-install-recommends hugo
 ```
 
 Now Hugo is installed and can build your site. This is also the first time we use a predefined [GitHub variable](https://docs.github.com/en/actions/learn-github-actions/variables): `{{ github.workspace }}` which will point to our checked out repository. 
 
 In order to only deploy the built site later and have it not mixed into the repository, Hugo should deploy the site to the subfolder `htdocs`.
 
-```yaml
-    - name: Build Hugo site
-        run: hugo -d ${{ github.workspace }}/htdocs --minify
+```
+- name: Build Hugo site
+    run: hugo -d ${{ github.workspace }}/htdocs --minify
 ```
 
 ### Optional: Setup Wireguard
 
 The next step is optional, but showcases another user generated action and the heavy use of GitHub encrypted secrets for sensitive data. Since my sshd is only accessible inside my VPN, I have to setup Wireguard inside the github-runner to deploy the site via SSH (scp) later.
 
-```yaml
-    # Need to install wireguard to access the server (ssh only allowed inside vpn)
-    - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
-        with:
-        endpoint: '${{ secrets.ENDPOINT }}'
-        endpoint_public_key: '${{ secrets.ENDPOINT_PUB_KEY }}'
-        ips: '${{ secrets.CLIENT_IP }}'
-        allowed_ips: '${{ secrets.ALLOWED_IPS }}'
-        private_key: '${{ secrets.CLIENT_PRV_KEY }}'
-        preshared_key: '${{ secrets.CLIENT_PRE_KEY }}'
+```
+# Need to install wireguard to access the server (ssh only allowed inside vpn)
+- name: Set up WireGuard
+    uses: egor-tensin/setup-wireguard@v1
+    with:
+    endpoint: '${{ secrets.ENDPOINT }}'
+    endpoint_public_key: '${{ secrets.ENDPOINT_PUB_KEY }}'
+    ips: '${{ secrets.CLIENT_IP }}'
+    allowed_ips: '${{ secrets.ALLOWED_IPS }}'
+    private_key: '${{ secrets.CLIENT_PRV_KEY }}'
+    preshared_key: '${{ secrets.CLIENT_PRE_KEY }}'
 ```
 
 The necessary secrets for Wireguard contain the following:
 
-```yaml
-	ALLOWED_IPS         - IPs the client will have access to
-	CLIENT_IP           - Own IP the client will assign
-	CLIENT_PRE_KEY      - Client pre shared key
-	CLIENT_PRV_KEY      - Client private key
-	ENDPOINT            - Server:Port to reach the Wireguard service
-	ENDPOINT_PRIVATE_IP - Private IP of the endpoint 
-	ENDPOINT_PUB_KEY    - Public key of wireguard server 
+```
+ALLOWED_IPS         - IPs the client will have access to
+CLIENT_IP           - Own IP the client will assign
+CLIENT_PRE_KEY      - Client pre shared key
+CLIENT_PRV_KEY      - Client private key
+ENDPOINT            - Server:Port to reach the Wireguard service
+ENDPOINT_PRIVATE_IP - Private IP of the endpoint 
+ENDPOINT_PUB_KEY    - Public key of wireguard server 
 ```
 
 ### Encrypted GitHub Secrets
@@ -276,32 +276,32 @@ Before you can deploy your site via SSH, you need to install the SSH keys you cr
 
 `PRIVATE_SSH_KEY` will contain the private key of the user `github` you have created earlier. Copy the content of:
 
-```bash
+```
 cat /home/github/.ssh/id_ed25519 
 ```
 
 in a new secret and name it `PRIVATE_SSH_KEY`. Afterwards you need to put your server's public ssh key (where your website will be deployed) into the `KNOWN_HOSTS` secret in order to make a trusted connection:
 
-```bash
+```
 cat /etc/ssh/ssh_host_ed25519_key.pub
 ```
 
 and past the content into a new secret. You have to add your server's hostname or IP adress in front of the key before saving the secret. It would look somethings similiar to:
 
-```bash
-    HOSTNAME_OR_IP ssh-ed25519 PUBLIC_KEY_HASH
+```
+HOSTNAME_OR_IP ssh-ed25519 PUBLIC_KEY_HASH
 ```
 
 ### Setup SSH access to the webserver
 
 Now the github-runner will setup the private ssh key and the known_hosts file so it can access your server via ssh.
 
-```yaml
-    - name: Install SSH Key
-        run: |
-        install -m 600 -D /dev/null ~/.ssh/id_ed25519
-        echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_ed25519
-        echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+```
+- name: Install SSH Key
+    run: |
+    install -m 600 -D /dev/null ~/.ssh/id_ed25519
+    echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_ed25519
+    echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 ```
 
 ### Deploy site
@@ -310,10 +310,10 @@ Finally it is time to deploy your site onto your webserver. For this task `scp` 
 
 For the purpose of this guide, the location of the web directory for the Hugo site will be in `/usr/local/www/hugo-site`. This, ofcourse, can and probably will differ from your installation.
 
-```yaml
-    # Deploy site from subfolder htdocs to the webserver 
-    - name: Deploy
-        run: scp -r htdocs/* github@HOSTNAME_OR_IP:/usr/local/www/hugo-site
+```
+# Deploy site from subfolder htdocs to the webserver 
+- name: Deploy
+    run: scp -r htdocs/* github@HOSTNAME_OR_IP:/usr/local/www/hugo-site
 ```
 
 ### Source material
