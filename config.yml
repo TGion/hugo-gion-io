@@ -22,7 +22,7 @@ markup:
     guessSyntax: true
     tabWidth: "8"
     lineAnchors: ""
-    style: ""
+    style: "modus-vivendi"
     noClasses: false
 
   goldmark:
