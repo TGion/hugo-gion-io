@@ -4,6 +4,8 @@
       {{ $syntax := resources.Get "/css/clipboard.css" | minify }}
       <link href="{{ $syntax.RelPermalink }}" rel="stylesheet">
     {{ end }}
+
+    <link href="/css/syntax.css" rel="stylesheet" type="text/css">
 {{ end }}
 
 {{ define "main" }}
