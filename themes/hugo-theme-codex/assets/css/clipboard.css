@@ -9,7 +9,7 @@
     border-radius: 4px;
     font-size: 0.8em;
     z-index: 0;
-    opacity: 0;
+    opacity: 1;
     transition: 0.1s;
   }
   .clipboard-button > svg {

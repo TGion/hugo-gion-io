@@ -26,8 +26,8 @@ const addCopyButtons = (clipboard) => {
         );
       });
       // 3. Append the button directly before the pre tag
-      const pre = codeBlock.parentNode;
-      pre.parentNode.insertBefore(button, pre);
+      const pre = codeBlock.parentElement;
+      pre.parentElement.insertBefore(button, pre);
     });
   };
 

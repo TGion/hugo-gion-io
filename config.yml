@@ -19,9 +19,11 @@ params:
 markup:
   highlight:
     codeFences: true
+    guessSyntax: true
     tabWidth: "8"
     lineAnchors: ""
     style: ""
+    noClasses: false
 
   goldmark:
     renderer:
