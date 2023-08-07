@@ -12,7 +12,9 @@
         target="_blank"
         rel="me noopener"
       >
-        <div class="social-icons__icon" style="background-image: url('{{print "svg/" $icon ".svg" | absURL}}')"></div>
+        <div class="social-icons__icon">
+          <img src="{{ print "svg/" $icon ".svg" | absURL}}">
+        </div>
       </a>
     {{ end }}
   {{ end }}   

@@ -1,6 +1,6 @@
 baseURL: https://gion.io
 languageCode: en
-title: gion . io
+title: gion.io
 theme: hugo-theme-codex
 
 defaultContentLanguage: en
@@ -61,3 +61,9 @@ menu:
       title: contact . me
       url: /contact/
       weight: 40
+
+params:
+  github: "https://github.com/TGion"
+  gists: "https://gist.github.com/TGion"
+  linkedin: "https://www.linkedin.com/in/tgion"
+  iconOrder: ["GitHub", "Gists", "LinkedIn"]
