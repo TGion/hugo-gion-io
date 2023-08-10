@@ -70,7 +70,7 @@ Every entry of the crontab file consists of the command or and the time at which
 
 ### Setting environment in crontab
 
-Crontab's are run with `/bin/bash` in a "clean" environment. This means, it may be necessary for you to take care of environment settings (e.g.):
+Crontab's are run with `/bin/sh` in a "clean" environment. This means, it may be necessary for you to take care of environment settings (e.g.):
 
 ```bash
 # Override default shell
@@ -253,7 +253,7 @@ echo "Build packages and upgrade system:"
 Now you can tell `at` to run you job file and mail the results to the user who fired the job:
 
 ```
-at -m -f synth-jobs now
+at -m -f ./synth-jobs now
 ```
 
 The job will be queued for immediate execution. But since [atrun](https://man.freebsd.org/cgi/man.cgi?query=atrun&sektion=8) which executes `at` jobs is managed by cron, it will be only picked up every 5 minutes (default on FreeBSD). See `/etc/cron.d/at` for more information or to shorten the intervall.
